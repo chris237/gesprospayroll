@@ -5,7 +5,7 @@
     "description": """Replaces the native payroll payslip report with a branded layout.""",
     "category": "Human Resources/Payroll",
     "depends": ["hr_payroll"],
-    "data": [
+    "data":
         "report/assets.xml",
         "report/payslip_templates.xml"
     ],
@@ -15,4 +15,5 @@
     "website": "https://www.gespros.com",
     "application": False,
     "installable": True,
+    "pre_init_hook": "pre_init_hook",
 }
