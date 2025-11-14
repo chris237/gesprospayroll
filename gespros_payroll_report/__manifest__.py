@@ -6,8 +6,10 @@
     "category": "Human Resources/Payroll",
     "depends": ["hr_payroll"],
     "data": [
+        "report/assets.xml",
         "report/payslip_templates.xml"
     ],
+    "assets": {},
     "license": "LGPL-3",
     "author": "GESPROS",
     "website": "https://www.gespros.com",
