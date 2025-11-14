@@ -2,166 +2,161 @@
 <odoo>
     <template id="report_hrsalaryslip" inherit_id="hr_payroll.report_hrsalaryslip">
         <xpath expr="//div[@class='page']" position="replace">
-            <div class="page">
-                <div class="gespros-payslip">
-                    <div class="header">
-                        <div class="company">
-                            <div class="company-name">${object.company_id.name}</div>
-                            <div class="company-address">
-                                <t t-esc="object.company_id.partner_id.contact_address"/>
-                            </div>
-                            <div class="company-contact">
-                                <t t-if="object.company_id.phone">Tél: <t t-esc="object.company_id.phone"/></t><br/>
-                                <t t-if="object.company_id.email">Email: <t t-esc="object.company_id.email"/></t>
-                            </div>
+            <div class="page gespros-payslip">
+                <div class="header">
+                    <div class="company">
+                        <div class="company-name">${object.company_id.name}</div>
+                        <div class="company-address">
+                            <t t-esc="object.company_id.partner_id.contact_address"/>
                         </div>
-                        <div class="document-meta">
-                            <div class="document-title">Pay Stub</div>
-                            <div class="document-number">
-                                <strong>Check Number:</strong>
-                                <span t-esc="object.number or object.name"/>
-                            </div>
-                            <div>
-                                <strong>Pay Period:</strong>
-                                <span>
-                                    <t t-esc="format_date(object.date_from)"/> -
-                                    <t t-esc="format_date(object.date_to)"/>
-                                </span>
-                            </div>
-                            <div>
-                                <strong>Pay Date:</strong>
-                                <span t-esc="format_date(object.date_from)"/>
-                            </div>
+                        <div class="company-contact">
+                            <t t-if="object.company_id.phone">Tél: <t t-esc="object.company_id.phone"/></t><br/>
+                            <t t-if="object.company_id.email">Email: <t t-esc="object.company_id.email"/></t>
                         </div>
                     </div>
-
-                    <div class="info-grid">
-                        <div class="info-card">
-                            <div class="label">Employee</div>
-                            <div class="value" t-esc="object.employee_id.name"/>
-                            <div class="label">Job Title</div>
-                            <div class="value" t-esc="object.employee_id.job_title"/>
+                    <div class="document-meta">
+                        <div class="document-title">Pay Stub</div>
+                        <div class="document-number">
+                            <strong>Check Number:</strong>
+                            <span t-esc="object.number or object.name"/>
                         </div>
-                        <div class="info-card">
-                            <div class="label">Department</div>
-                            <div class="value" t-esc="object.employee_id.department_id.name"/>
-                            <div class="label">Manager</div>
-                            <div class="value" t-esc="object.employee_id.parent_id.name"/>
-                        </div>
-                        <div class="info-card">
-                            <div class="label">Bank</div>
-                            <div class="value" t-esc="object.employee_id.bank_account_id.bank_id.name"/>
-                            <div class="label">Account</div>
-                            <div class="value" t-esc="object.employee_id.bank_account_id.acc_number"/>
-                        </div>
-                    </div>
-
-                    <div class="table-section">
-                        <div class="section-title">Earnings</div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Description</th>
-                                    <th class="text-center">Rate</th>
-                                    <th class="text-center">Hours</th>
-                                    <th class="text-right">Current</th>
-                                    <th class="text-right">YTD</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <t t-set="earnings" t-value="object.line_ids.filtered(lambda l: l.category_id.code not in ('DED', 'TAX', 'INSUR'))"/>
-                                <t t-foreach="earnings" t-as="line">
-                                    <tr>
-                                        <td><span t-esc="line.name"/></td>
-                                        <td class="text-center">
-                                            <t t-if="line.rate">
-                                                <span t-esc="round(line.rate, 2)"/>%
-                                            </t>
-                                        </td>
-                                        <td class="text-center"><span t-esc="line.quantity"/></td>
-                                        <td class="text-right"><span t-esc="format_amount(line.total, object.currency_id)"/></td>
-                                        <td class="text-right">
-                                            <span t-esc="format_amount(getattr(line, 'total_accumulated', line.total), object.currency_id)"/>
-                                        </td>
-                                    </tr>
-                                </t>
-                                <t t-if="not earnings">
-                                    <tr>
-                                        <td colspan="5" class="text-center">No earnings lines available</td>
-                                    </tr>
-                                </t>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="table-section">
-                        <div class="section-title">Deductions &amp; Taxes</div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Description</th>
-                                    <th class="text-center">Employee</th>
-                                    <th class="text-center">Employer</th>
-                                    <th class="text-right">Current</th>
-                                    <th class="text-right">YTD</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <t t-set="deductions" t-value="object.line_ids.filtered(lambda l: l.category_id.code in ('DED', 'TAX', 'INSUR'))"/>
-                                <t t-foreach="deductions" t-as="line">
-                                    <tr>
-                                        <td><span t-esc="line.name"/></td>
-                                        <td class="text-center">
-                                            <span t-esc="format_amount(getattr(line, 'total_employee_contrib', line.total), object.currency_id)"/>
-                                        </td>
-                                        <td class="text-center">
-                                            <span t-esc="format_amount(getattr(line, 'total_employer_contrib', getattr(line, 'total_company_contrib', 0.0)), object.currency_id)"/>
-                                        </td>
-                                        <td class="text-right"><span t-esc="format_amount(line.total, object.currency_id)"/></td>
-                                        <td class="text-right">
-                                            <span t-esc="format_amount(getattr(line, 'total_accumulated', line.total), object.currency_id)"/>
-                                        </td>
-                                    </tr>
-                                </t>
-                                <t t-if="not deductions">
-                                    <tr>
-                                        <td colspan="5" class="text-center">No deductions or taxes available</td>
-                                    </tr>
-                                </t>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="totals-grid">
-                        <div class="total-card">
-                            <div class="label">Gross Pay</div>
-                            <div class="value" t-esc="format_amount(getattr(object, 'gross_wage', object.amount), object.currency_id)"/>
-                        </div>
-                        <div class="total-card">
-                            <div class="label">Total Taxes</div>
-                            <div class="value" t-esc="format_amount(sum(object.line_ids.filtered(lambda l: l.category_id.code == 'TAX').mapped('total')), object.currency_id)"/>
-                        </div>
-                        <div class="total-card">
-                            <div class="label">Net Pay</div>
-                            <div class="value" t-esc="format_amount(object.net_wage, object.currency_id)"/>
-                        </div>
-                    </div>
-
-                    <div class="footer">
                         <div>
-                            <strong>Payment Mode:</strong>
-                            <span t-if="hasattr(object, 'payslip_run_id') and object.payslip_run_id.payment_mode_id"
-                                  t-esc="object.payslip_run_id.payment_mode_id.name"/>
-                            <span t-elif="hasattr(object, 'payment_mode_id') and object.payment_mode_id"
-                                  t-esc="object.payment_mode_id.name"/>
-                            <span t-else="">Bank Transfer</span>
+                            <strong>Pay Period:</strong>
+                            <span>
+                                <t t-esc="format_date(object.date_from)"/> -
+                                <t t-esc="format_date(object.date_to)"/>
+                            </span>
                         </div>
-                        <div class="signature-block">
-                            <div>Employee Signature</div>
+                        <div>
+                            <strong>Pay Date:</strong> <span t-esc="format_date(object.date_from)"/>
                         </div>
-                        <div class="signature-block">
-                            <div>Authorized Signature</div>
-                        </div>
+                    </div>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="label">Employee</div>
+                        <div class="value" t-esc="object.employee_id.name"/>
+                        <div class="label">Job Title</div>
+                        <div class="value" t-esc="object.employee_id.job_title"/>
+                    </div>
+                    <div class="info-card">
+                        <div class="label">Department</div>
+                        <div class="value" t-esc="object.employee_id.department_id.name"/>
+                        <div class="label">Manager</div>
+                        <div class="value" t-esc="object.employee_id.parent_id.name"/>
+                    </div>
+                    <div class="info-card">
+                        <div class="label">Bank</div>
+                        <div class="value" t-esc="object.employee_id.bank_account_id.bank_id.name"/>
+                        <div class="label">Account</div>
+                        <div class="value" t-esc="object.employee_id.bank_account_id.acc_number"/>
+                    </div>
+                </div>
+
+                <div class="table-section">
+                    <div class="section-title">Earnings</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th class="text-center">Rate</th>
+                                <th class="text-center">Hours</th>
+                                <th class="text-right">Current</th>
+                                <th class="text-right">YTD</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="earnings" t-value="object.line_ids.filtered(lambda l: l.category_id.code not in ('DED', 'TAX', 'INSUR'))"/>
+                            <t t-foreach="earnings" t-as="line">
+                                <tr>
+                                    <td><span t-esc="line.name"/></td>
+                                    <td class="text-center">
+                                        <t t-if="line.rate"> <span t-esc="round(line.rate, 2)"/>% </t>
+                                    </td>
+                                    <td class="text-center"><span t-esc="line.quantity"/></td>
+                                    <td class="text-right"><span t-esc="format_amount(line.total, object.currency_id)"/></td>
+                                    <td class="text-right">
+                                        <span t-esc="format_amount(hasattr(line, 'total_accumulated') and line.total_accumulated or line.total, object.currency_id)"/>
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-if="not earnings">
+                                <tr>
+                                    <td colspan="5" class="text-center">No earnings lines available</td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-section">
+                    <div class="section-title">Deductions &amp; Taxes</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th class="text-center">Employee</th>
+                                <th class="text-center">Employer</th>
+                                <th class="text-right">Current</th>
+                                <th class="text-right">YTD</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="deductions" t-value="object.line_ids.filtered(lambda l: l.category_id.code in ('DED', 'TAX', 'INSUR'))"/>
+                            <t t-foreach="deductions" t-as="line">
+                                <tr>
+                                    <td><span t-esc="line.name"/></td>
+                                    <td class="text-center">
+                                        <span t-esc="format_amount(hasattr(line, 'total_employee_contrib') and line.total_employee_contrib or line.total, object.currency_id)"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="format_amount((hasattr(line, 'total_employer_contrib') and line.total_employer_contrib) or (hasattr(line, 'total_company_contrib') and line.total_company_contrib) or 0, object.currency_id)"/>
+                                    </td>
+                                    <td class="text-right"><span t-esc="format_amount(line.total, object.currency_id)"/></td>
+                                    <td class="text-right">
+                                        <span t-esc="format_amount(hasattr(line, 'total_accumulated') and line.total_accumulated or line.total, object.currency_id)"/>
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-if="not deductions">
+                                <tr>
+                                    <td colspan="5" class="text-center">No deductions or taxes available</td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="totals-grid">
+                    <div class="total-card">
+                        <div class="label">Gross Pay</div>
+                        <div class="value" t-esc="format_amount(getattr(object, 'gross_wage', False) and object.gross_wage or object.amount, object.currency_id)"/>
+                    </div>
+                    <div class="total-card">
+                        <div class="label">Total Taxes</div>
+                        <div class="value" t-esc="format_amount(sum(object.line_ids.filtered(lambda l: l.category_id.code == 'TAX').mapped('total')), object.currency_id)"/>
+                    </div>
+                    <div class="total-card">
+                        <div class="label">Net Pay</div>
+                        <div class="value" t-esc="format_amount(object.net_wage, object.currency_id)"/>
+                    </div>
+                </div>
+
+                <div class="footer">
+                    <div>
+                        <strong>Payment Mode:</strong>
+                        <span t-if="hasattr(object, 'payslip_run_id') and object.payslip_run_id.payment_mode_id"
+                              t-esc="object.payslip_run_id.payment_mode_id.name"/>
+                        <span t-elif="hasattr(object, 'payment_mode_id') and object.payment_mode_id"
+                              t-esc="object.payment_mode_id.name"/>
+                        <span t-else="">Bank Transfer</span>
+                    </div>
+                    <div class="signature-block">
+                        <div>Employee Signature</div>
+                    </div>
+                    <div class="signature-block">
+                        <div>Authorized Signature</div>
                     </div>
                 </div>
             </div>
