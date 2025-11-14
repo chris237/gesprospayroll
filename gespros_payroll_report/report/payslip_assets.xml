@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="payslip_report_assets" inherit_id="web._assets_qweb" name="GESPROS Payroll Payslip Assets">
+        <xpath expr="." position="inside">
+            <style type="text/css">
+                .gespros-payslip {
+                    font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+                    color: #1b1b1b;
+                    font-size: 11px;
+                }
+
+                .gespros-payslip h1,
+                .gespros-payslip h2,
+                .gespros-payslip h3,
+                .gespros-payslip h4 {
+                    color: #2c8ecb;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                }
+
+                .gespros-payslip .header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 16px;
+                }
+
+                .gespros-payslip .company {
+                    max-width: 45%;
+                }
+
+                .gespros-payslip .company-name {
+                    font-size: 16px;
+                    font-weight: 700;
+                    margin-bottom: 4px;
+                    color: #2c8ecb;
+                }
+
+                .gespros-payslip .company-address {
+                    font-size: 10px;
+                    line-height: 1.4;
+                }
+
+                .gespros-payslip .document-meta {
+                    text-align: right;
+                }
+
+                .gespros-payslip .document-title {
+                    font-size: 18px;
+                    font-weight: 700;
+                    color: #2c8ecb;
+                    margin-bottom: 4px;
+                }
+
+                .gespros-payslip .document-number,
+                .gespros-payslip .document-meta div {
+                    font-size: 12px;
+                    color: #141414;
+                }
+
+                .gespros-payslip .info-grid {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 12px;
+                    margin-bottom: 16px;
+                }
+
+                .gespros-payslip .info-card {
+                    border: 1px solid #8fc8e6;
+                    border-radius: 6px;
+                    padding: 8px 10px;
+                    background-color: #d5edf8;
+                }
+
+                .gespros-payslip .info-card .label {
+                    font-size: 10px;
+                    color: #2c8ecb;
+                    text-transform: uppercase;
+                    font-weight: 700;
+                    margin-bottom: 2px;
+                }
+
+                .gespros-payslip .info-card .value {
+                    font-size: 12px;
+                    font-weight: 600;
+                }
+
+                .gespros-payslip .table-section {
+                    margin-bottom: 18px;
+                }
+
+                .gespros-payslip .section-title {
+                    background-color: #2c8ecb;
+                    color: #ffffff;
+                    padding: 6px 10px;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    font-size: 11px;
+                }
+
+                .gespros-payslip table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+
+                .gespros-payslip thead {
+                    background-color: #aed6ec;
+                    color: #2c8ecb;
+                    text-transform: uppercase;
+                    font-size: 10px;
+                }
+
+                .gespros-payslip thead th {
+                    padding: 6px 8px;
+                    border-bottom: 1px solid #6fb2dd;
+                }
+
+                .gespros-payslip tbody tr:nth-child(even) {
+                    background-color: #cfe7f5;
+                }
+
+                .gespros-payslip td {
+                    padding: 6px 8px;
+                    border-bottom: 1px solid #8fc8e6;
+                }
+
+                .gespros-payslip .text-right {
+                    text-align: right;
+                }
+
+                .gespros-payslip .text-center {
+                    text-align: center;
+                }
+
+                .gespros-payslip .totals-grid {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 12px;
+                }
+
+                .gespros-payslip .total-card {
+                    background: linear-gradient(135deg, #2c8ecb, #08a5b7);
+                    color: #ffffff;
+                    padding: 10px;
+                    border-radius: 6px;
+                    text-align: center;
+                }
+
+                .gespros-payslip .total-card .label {
+                    text-transform: uppercase;
+                    font-size: 10px;
+                    margin-bottom: 4px;
+                    letter-spacing: 0.5px;
+                }
+
+                .gespros-payslip .total-card .value {
+                    font-size: 14px;
+                    font-weight: 700;
+                }
+
+                .gespros-payslip .footer {
+                    margin-top: 30px;
+                    font-size: 10px;
+                    display: flex;
+                    justify-content: space-between;
+                    color: #141414;
+                }
+
+                .gespros-payslip .signature-block {
+                    min-width: 45%;
+                    border-top: 1px solid #87bee2;
+                    padding-top: 8px;
+                    text-align: center;
+                }
+            </style>
+        </xpath>
+    </template>
+</odoo>
