@@ -4,10 +4,13 @@
     "summary": "Custom payslip layout inspired by GESPROS template",
     "description": """Replaces the native payroll payslip report with a branded layout.""",
     "category": "Human Resources/Payroll",
-    "depends": ["hr_payroll"],
-    "data":
+    "depends": [
+        "web",
+        "hr_payroll",
+    ],
+    "data": [
         "report/assets.xml",
-        "report/payslip_templates.xml"
+        "report/payslip_templates.xml",
     ],
     "assets": {},
     "license": "LGPL-3",
