@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_hrsalaryslip" inherit_id="hr_payroll.report_hrsalaryslip">
+        <xpath expr="//div[@class='page']" position="replace">
+            <div class="page">
+                <style type="text/css">
+                    .gespros-payslip {
+                        font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+                        color: #1b1b1b;
+                        font-size: 11px;
+                    }
+
+                    .gespros-payslip h1,
+                    .gespros-payslip h2,
+                    .gespros-payslip h3,
+                    .gespros-payslip h4 {
+                        color: #2c8ecb;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                        letter-spacing: 1px;
+                    }
+
+                    .gespros-payslip .header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 16px;
+                    }
+
+                    .gespros-payslip .company {
+                        max-width: 45%;
+                    }
+
+                    .gespros-payslip .company-name {
+                        font-size: 16px;
+                        font-weight: 700;
+                        margin-bottom: 4px;
+                        color: #2c8ecb;
+                    }
+
+                    .gespros-payslip .company-address {
+                        font-size: 10px;
+                        line-height: 1.4;
+                    }
+
+                    .gespros-payslip .document-meta {
+                        text-align: right;
+                    }
+
+                    .gespros-payslip .document-title {
+                        font-size: 18px;
+                        font-weight: 700;
+                        color: #2c8ecb;
+                        margin-bottom: 4px;
+                    }
+
+                    .gespros-payslip .document-number,
+                    .gespros-payslip .document-meta div {
+                        font-size: 12px;
+                        color: #141414;
+                    }
+
+                    .gespros-payslip .info-grid {
+                        display: grid;
+                        grid-template-columns: repeat(3, 1fr);
+                        gap: 12px;
+                        margin-bottom: 16px;
+                    }
+
+                    .gespros-payslip .info-card {
+                        border: 1px solid #8fc8e6;
+                        border-radius: 6px;
+                        padding: 8px 10px;
+                        background-color: #d5edf8;
+                    }
+
+                    .gespros-payslip .info-card .label {
+                        font-size: 10px;
+                        color: #2c8ecb;
+                        text-transform: uppercase;
+                        font-weight: 700;
+                        margin-bottom: 2px;
+                    }
+
+                    .gespros-payslip .info-card .value {
+                        font-size: 12px;
+                        font-weight: 600;
+                    }
+
+                    .gespros-payslip .table-section {
+                        margin-bottom: 18px;
+                    }
+
+                    .gespros-payslip .section-title {
+                        background-color: #2c8ecb;
+                        color: #ffffff;
+                        padding: 6px 10px;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                        font-size: 11px;
+                    }
+
+                    .gespros-payslip table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+
+                    .gespros-payslip thead {
+                        background-color: #aed6ec;
+                        color: #2c8ecb;
+                        text-transform: uppercase;
+                        font-size: 10px;
+                    }
+
+                    .gespros-payslip thead th {
+                        padding: 6px 8px;
+                        border-bottom: 1px solid #6fb2dd;
+                    }
+
+                    .gespros-payslip tbody tr:nth-child(even) {
+                        background-color: #cfe7f5;
+                    }
+
+                    .gespros-payslip td {
+                        padding: 6px 8px;
+                        border-bottom: 1px solid #8fc8e6;
+                    }
+
+                    .gespros-payslip .text-right {
+                        text-align: right;
+                    }
+
+                    .gespros-payslip .text-center {
+                        text-align: center;
+                    }
+
+                    .gespros-payslip .totals-grid {
+                        display: grid;
+                        grid-template-columns: repeat(3, 1fr);
+                        gap: 12px;
+                    }
+
+                    .gespros-payslip .total-card {
+                        background: linear-gradient(135deg, #2c8ecb, #08a5b7);
+                        color: #ffffff;
+                        padding: 10px;
+                        border-radius: 6px;
+                        text-align: center;
+                    }
+
+                    .gespros-payslip .total-card .label {
+                        text-transform: uppercase;
+                        font-size: 10px;
+                        margin-bottom: 4px;
+                        letter-spacing: 0.5px;
+                    }
+
+                    .gespros-payslip .total-card .value {
+                        font-size: 14px;
+                        font-weight: 700;
+                    }
+
+                    .gespros-payslip .footer {
+                        margin-top: 30px;
+                        font-size: 10px;
+                        display: flex;
+                        justify-content: space-between;
+                        color: #141414;
+                    }
+
+                    .gespros-payslip .signature-block {
+                        min-width: 45%;
+                        border-top: 1px solid #87bee2;
+                        padding-top: 8px;
+                        text-align: center;
+                    }
+                </style>
+                <div class="gespros-payslip">
+                    <div class="header">
+                        <div class="company">
+                            <div class="company-name">${object.company_id.name}</div>
+                            <div class="company-address">
+                                <t t-esc="object.company_id.partner_id.contact_address"/>
+                            </div>
+                            <div class="company-contact">
+                                <t t-if="object.company_id.phone">Tél: <t t-esc="object.company_id.phone"/></t><br/>
+                                <t t-if="object.company_id.email">Email: <t t-esc="object.company_id.email"/></t>
+                            </div>
+                        </div>
+                        <div class="document-meta">
+                            <div class="document-title">Pay Stub</div>
+                            <div class="document-number">
+                                <strong>Check Number:</strong>
+                                <span t-esc="object.number or object.name"/>
+                            </div>
+                            <div>
+                                <strong>Pay Period:</strong>
+                                <span>
+                                    <t t-esc="format_date(object.date_from)"/> -
+                                    <t t-esc="format_date(object.date_to)"/>
+                                </span>
+                            </div>
+                            <div>
+                                <strong>Pay Date:</strong>
+                                <span t-esc="format_date(object.date_from)"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <div class="label">Employee</div>
+                            <div class="value" t-esc="object.employee_id.name"/>
+                            <div class="label">Job Title</div>
+                            <div class="value" t-esc="object.employee_id.job_title"/>
+                        </div>
+                        <div class="info-card">
+                            <div class="label">Department</div>
+                            <div class="value" t-esc="object.employee_id.department_id.name"/>
+                            <div class="label">Manager</div>
+                            <div class="value" t-esc="object.employee_id.parent_id.name"/>
+                        </div>
+                        <div class="info-card">
+                            <div class="label">Bank</div>
+                            <div class="value" t-esc="object.employee_id.bank_account_id.bank_id.name"/>
+                            <div class="label">Account</div>
+                            <div class="value" t-esc="object.employee_id.bank_account_id.acc_number"/>
+                        </div>
+                    </div>
+
+                    <div class="table-section">
+                        <div class="section-title">Earnings</div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th class="text-center">Rate</th>
+                                    <th class="text-center">Hours</th>
+                                    <th class="text-right">Current</th>
+                                    <th class="text-right">YTD</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="earnings" t-value="object.line_ids.filtered(lambda l: l.category_id.code not in ('DED', 'TAX', 'INSUR'))"/>
+                                <t t-foreach="earnings" t-as="line">
+                                    <tr>
+                                        <td><span t-esc="line.name"/></td>
+                                        <td class="text-center">
+                                            <t t-if="line.rate">
+                                                <span t-esc="round(line.rate, 2)"/>%
+                                            </t>
+                                        </td>
+                                        <td class="text-center"><span t-esc="line.quantity"/></td>
+                                        <td class="text-right"><span t-esc="format_amount(line.total, object.currency_id)"/></td>
+                                        <td class="text-right">
+                                            <span t-esc="format_amount(getattr(line, 'total_accumulated', line.total), object.currency_id)"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-if="not earnings">
+                                    <tr>
+                                        <td colspan="5" class="text-center">No earnings lines available</td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="table-section">
+                        <div class="section-title">Deductions &amp; Taxes</div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th class="text-center">Employee</th>
+                                    <th class="text-center">Employer</th>
+                                    <th class="text-right">Current</th>
+                                    <th class="text-right">YTD</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="deductions" t-value="object.line_ids.filtered(lambda l: l.category_id.code in ('DED', 'TAX', 'INSUR'))"/>
+                                <t t-foreach="deductions" t-as="line">
+                                    <tr>
+                                        <td><span t-esc="line.name"/></td>
+                                        <td class="text-center">
+                                            <span t-esc="format_amount(getattr(line, 'total_employee_contrib', line.total), object.currency_id)"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="format_amount(getattr(line, 'total_employer_contrib', getattr(line, 'total_company_contrib', 0.0)), object.currency_id)"/>
+                                        </td>
+                                        <td class="text-right"><span t-esc="format_amount(line.total, object.currency_id)"/></td>
+                                        <td class="text-right">
+                                            <span t-esc="format_amount(getattr(line, 'total_accumulated', line.total), object.currency_id)"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-if="not deductions">
+                                    <tr>
+                                        <td colspan="5" class="text-center">No deductions or taxes available</td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="totals-grid">
+                        <div class="total-card">
+                            <div class="label">Gross Pay</div>
+                            <div class="value" t-esc="format_amount(getattr(object, 'gross_wage', object.amount), object.currency_id)"/>
+                        </div>
+                        <div class="total-card">
+                            <div class="label">Total Taxes</div>
+                            <div class="value" t-esc="format_amount(sum(object.line_ids.filtered(lambda l: l.category_id.code == 'TAX').mapped('total')), object.currency_id)"/>
+                        </div>
+                        <div class="total-card">
+                            <div class="label">Net Pay</div>
+                            <div class="value" t-esc="format_amount(object.net_wage, object.currency_id)"/>
+                        </div>
+                    </div>
+
+                    <div class="footer">
+                        <div>
+                            <strong>Payment Mode:</strong>
+                            <span t-if="hasattr(object, 'payslip_run_id') and object.payslip_run_id.payment_mode_id"
+                                  t-esc="object.payslip_run_id.payment_mode_id.name"/>
+                            <span t-elif="hasattr(object, 'payment_mode_id') and object.payment_mode_id"
+                                  t-esc="object.payment_mode_id.name"/>
+                            <span t-else="">Bank Transfer</span>
+                        </div>
+                        <div class="signature-block">
+                            <div>Employee Signature</div>
+                        </div>
+                        <div class="signature-block">
+                            <div>Authorized Signature</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
