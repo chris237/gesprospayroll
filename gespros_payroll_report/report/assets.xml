@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <template id="assets_report" name="GESPROS Payroll Report Assets" inherit_id="web.report_assets_common">
+    <template id="assets_report" name="GESPROS Payroll Report Assets" inherit_id="web.assets_pdf">
         <xpath expr="." position="inside">
             <style type="text/scss">
                 $gespros-primary: #2c8ecb;
